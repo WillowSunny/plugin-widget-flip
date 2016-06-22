@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<plugin>
+    <id>com.fr.plugin.widget.flip</id>
+    <name><![CDATA[超酷3D翻页式计数器]]></name>
+    <active>yes</active>
+    <version>3.0</version>
+    <env-version>8.0</env-version>
+    <jartime>2015-06-05</jartime>
+    <vendor>Willow,静听禅鸣</vendor>
+    <description><![CDATA[在表单中实现翻页式效果的计数器插件。该计数器插件可以实现根据后台数据库的变化而实时变化。]]></description>
+    <change-notes><![CDATA[
+        <p>[2016-06-10]Wilow:解决IE刷新无法取到数的问题</p>
+		<p>[2016-06-22]Wilow:添加功能点记录</p>
+
+    ]]></change-notes>
+    <extra-core>
+         <LocaleFinder class="com.fr.plugin.widget.flip.FlipLocaleFinder"/>
+         
+    </extra-core>
+	<extra-form>
+       <JavaScriptFileHandler class="com.fr.plugin.widget.flip.JavaScriptFileLoader"/>
+         <!-- CssFileHandler class="com.fr.plugin.widget.flip.CssFileHandler"/ -->
+    </extra-form>
+    <extra-report/>
+    <extra-designer>
+        <FormWidgetOptionProvider class="com.fr.plugin.widget.flip.FlipInit"/>
+    </extra-designer>
+</plugin>
+

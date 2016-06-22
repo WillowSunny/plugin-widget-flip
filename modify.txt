@@ -1,0 +1,84 @@
+/**
+ * 一、FlipWidget类
+ * 1、将flipFM变量删除，因为一直没有对其进行使用
+ 2、将dependence函数代码删除，因为返回的一直就是一个空的字符串组
+ 3、 public Object getWidget() {
+ return this.flipFM != null?this.flipFM :(this.widgetValue.getValue() != null?this.widgetValue.getValue():null);
+ }
+ 改为
+ public Object getWidget() {
+ return this.widgetValue.getValue();
+ }
+4、由于使用的只有公式和数据列，所以将
+ private int getWidgetValueFM(Calculator var1) throws Exception {
+ int value =0;
+ if(widgetValue.getValue()==null){
+ value = 0;
+ }else{
+ if(widgetValue.getValue() instanceof Formula)
+ {
+ value =  (int) var1.eval((Formula)widgetValue.getValue());
+ } else
+ if(widgetValue.getValue() instanceof DataBinding)
+ {
+ value =  getWidgetValueByBinding(var1);
+ }
+ }
+ return value;
+ }
+ 改为：
+ private int getWidgetValueFM(Calculator var1) throws Exception {
+ int value =0;
+ if(widgetValue.getValue() instanceof Formula)
+ {
+ value =  (int) var1.eval((Formula)widgetValue.getValue());
+ } else
+ if(widgetValue.getValue() instanceof DataBinding)
+ {
+ value =  getWidgetValueByBinding(var1);
+ }
+ return value;
+ }
+ 5、删除getWidget方法
+ 6、绑定数据列的方法，由原来的只有BigDecimal，增加了整型字段，字符型字段做判断，因为你使用的是BigDecimal的，而我的SQLsever使用的是INT型的， 所以增加了两个字段类型的判断
+ private int getWidgetValueByBinding(Calculator var1){
+ int value =0;
+ WidgetValue.WidgetValueInfo var5 = new WidgetValue.WidgetValueInfo(this.getWidgetName());
+ Object var6 = this.getWidgetValue().createAttrResult(var5,var1, new JSONObject());
+ if(var6 instanceof Integer){
+ value = ((Integer) var6).intValue();
+ }
+ else if(var6 instanceof BigDecimal){
+ value = ((BigDecimal) var6).intValue();
+ }
+ else if(var6 instanceof String){
+ try {
+ value = (Integer.parseInt(var6.toString()));
+ }
+ catch (Exception e)
+ {
+ FRContext.getLogger().error(e.getMessage(), e);
+ }
+ }
+ return value;
+ }
+ 7、删除了该访法，因为就只返回一个值，
+ public Object value2Config(Object var1, CalculatorProvider var2){
+ return var1;
+ }
+ 8、应插件开发要求，添加功能监控节点代码
+ private static FunctionProcessor Flip = new AbstractFunctionProcessor() {
+@Override
+public int getId() {
+return FunctionHelper.generateFunctionID("com.fr.plugin.widget.flip");
+}
+
+@Override
+public String toString() {
+return "Flip";
+}
+};
+ 二、FlipWidgetCreate类
+ 1、editor.add(textField, BorderLayout.SOUTH);这个原来显示在控件在右边，非常不美观，所以现在放在控件下方了
+ 2、将所有的中文都转成了Unicode码
+ */
